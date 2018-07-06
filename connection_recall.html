@@ -159,7 +159,6 @@
 
             for (var i = 0; i < subject_imgs.length; ++i) {
                 row = i < 6 ? "1":"2";
-                console.log(row)
                 if (i===iterator) {
                     continue;
                 }
@@ -174,7 +173,6 @@
             $('#friend_input').removeClass('is-invalid');
             if (eval_input($("#friend_input").val())) {
                 $('#friend_input').addClass('is-invalid');
-                console.log('inside');
                 return;
             }
             friend_inputs.push($("#friend_input").val())
@@ -187,7 +185,6 @@
             $('#friend_input').removeClass('is-invalid');
             if (eval_input($("#friend_input").val())) {
                 $('#friend_input').addClass('is-invalid');
-                console.log('inside');
                 return;
             }
 
@@ -197,10 +194,18 @@
                 var zid = $(this).attr("id")
                 checked_nodes.push(zid.substring(8))
             })
+            console.log("checked nodes")
+            console.log(checked_nodes)
+
+            results.push([friend_inputs,checked_nodes])
+            console.log("results")
+            console.log(results)
 
             if (iterator < 10) {
                 iterator+=1;
                 $('#friend_input').val("");
+                checked_nodes = [];
+                friend_inputs = [];
                 $('#submit_first').show();
                 $('#part2').hide();
                 $('#instr2').hide();
@@ -225,7 +230,6 @@
             $(".node-button").click(function() {
                 var rel_node = $(this).attr("for");
                 $("#"+rel_node).toggleClass("node_clicked");
-                console.log(rel_node)
             });
         }
     </script>
