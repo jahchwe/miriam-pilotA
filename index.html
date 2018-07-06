@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Experiment</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    </head>
+
+    <!-- CSS -->
+    <style type="text/css">
+        #info-form {
+            position: absolute;
+            width: 20%;
+            top: 35%;
+            left: 40%;
+        }
+        .submit-btn {
+            display: table;
+            margin: auto;
+        }
+        #section-group .radio {
+            margin-left: 5px;
+        }
+        #instr {
+            margin: auto;
+            width: 270px;
+            margin-top: 30vh;
+        }
+    </style>
+
+    <!-- HTML -->
+    <body>
+        <div id="info">
+            <div id="info-form" class="survey" data-toggle="validator" role="form">
+                <form action="javascript:signin();" class="form-horizontal">
+                    <div id="user-id-group" class="form-group">
+                        <label id="user-id-text" class="control-label" for="user-id">ID</label>
+                        <input id="user-id" type="text" class="form-control input-md" required>
+                    </div>
+                    <div id="section-group" class="form-group">
+                        <label id="user-id-text" class="control-label">Section</label>
+                        <div class="row">
+                            <div class="radio col-auto">
+                                <input name="section" type="radio" value="1" required> 1
+                            </div>
+                            <div class="radio col">
+                                <input name="section" type="radio" value="2"> 2
+                            </div>
+                        </div>
+                    </div>
+                    <button id="submit" type="submit" class="btn btn-primary submit-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="instr">
+            <p id="instr-text"></p>
+            <button id="start" class="btn btn-primary submit-btn">Start</button>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            var instrText = [
+                'On the next page, you will see the images of people again. Your job is to reconstruct the social network you\'ve learned about -- just draw a connection between any two people who are friends.',
+                'On the next page, you will see the images of airports again. Your job is to reconstruct the flight network you\'ve learned about -- just draw a connection between any two airports that are connected by a direct flight.'
+            ];
+            var userId, sectionId;
+            $('#instr').hide();
+            function signin() {
+                $('#user-id').removeClass('is-invalid');
+                userId = $('#user-id').val();
+                sectionId = $("input[name='section']:checked").val();
+                if (!userId.startsWith('ucla') || isNaN(userId.substring(4))) {  // error checking
+                    $('#user-id').addClass('is-invalid');
+                    return;
+                }
+                $('#instr-text').text(instrText[parseInt(userId.substring(4)) % 2]);
+                $('#info').hide();
+                $('#instr').show();
+            }
+            $('#start').click(function() {
+                window.location.href = 'connection_recall.html?id=' + userId + '&section=' + sectionId;
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+body { background-color: #eee; }
+
+#reset {
+  position: absolute;
+  margin-left: 132vh;  /* match network-wrapper */
+  bottom: 70px;
+}
+
+#submit {
+  position: absolute;
+  margin-left: 132vh;  /* match network-wrapper */
+  bottom: 2vh;
+}
+
+#instr {
+  margin-left: 132vh;
+  margin-right: 2vh;
+  margin-top: 4vh;
+  color: #555;
+}
+
+#end-instr {
+  display: table;
+  margin: auto;
+  margin-top: 48vh;
+  font-size: 20pt;
+}
+
+#network-wrapper {
+  background-color: white;
+  position: absolute;
+  width: 128vh;
+  height: 96vh;
+  top: 2vh;
+  left: 2vh;
+  margin: auto;
+  border-radius: 4px;
+  border: 1px solid #cecece;
+}
+
+#process-modal {
+  color: white;
+  width: 100%;
+  text-align: center;
+  top: 49%;
+}
+
+.modal-backdrop.show {
+   opacity: 0.8;
+}
