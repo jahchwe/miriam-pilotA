@@ -4,6 +4,7 @@ $(function() {
     'use strict';
 
     // parse id in URL
+
     var userId = '';
     var sid = null, sectionId = null;
     var parameters = window.location.search.substring(1);
@@ -18,9 +19,10 @@ $(function() {
         return;
     }
     sid = parseInt(sid);
-    var nodeName = sid % 2 === 0 ? 'person' : 'airport';
-    $('#instr').html('Click "Add Connection" to add connections between ' + (sid % 2 === 0 ? 'people' : 'airports') +
-    '.<br/><br/>Click on a connection to edit or remove it.');
+
+
+    var nodeName = "person";
+    $('#instr').html('Click "Add Connection" to add connections between people.<br/><br/>Click on a connection to edit or remove it.');
 
     // prevent closing window
     window.onbeforeunload = function() {
@@ -45,11 +47,11 @@ $(function() {
     var initial_nodes = [];
     var network = null;
 
-    for (var i = 0; i < subject_imgs[sid][sectionId].length; ++i) {
+    for (var i = 0; i < subject_imgs.length; ++i) {
         initial_nodes.push({
             id: i,
-            label: subject_imgs[sid][sectionId][i][1],
-            image: IMG_DIR + subject_imgs[sid][sectionId][i][0],
+            //label: subject_imgs[sid][sectionId][i][1],
+            image: IMG_DIR + subject_imgs[i],
             shape: 'circularImage'
         });
     }
