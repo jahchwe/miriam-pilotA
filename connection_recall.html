@@ -29,9 +29,9 @@
 
         #part2 {
           position: relative;
-          width: 60%;
+          width: 80%;
           top: 10%;
-          left: 20%;
+          left: 10%;
         }
 
         .caption {
@@ -39,6 +39,15 @@
         }
 
         #num_friends {
+          margin-top: 20px;
+        }
+
+        #instr1 {
+          margin-top: 30px;
+        }
+
+        #submit_second {
+          margin-bottom: 20px;
           margin-top: 20px;
         }
 
@@ -50,7 +59,7 @@
     <body>
         <div id="part1" class="part">
             <div id="instr1">
-                <p id="instr-text" class="text-center"> How many friends does this person have? Replace with airport language depending on condition? </p>
+                <p id="instr-text" class="text-center"><b>How many friends does this person have?</b></p>
             </div>
 
             <div id="primary_node_container">
@@ -86,7 +95,7 @@
 
             <div id="info-form" class="survey" data-toggle="validator" role="form">
                 <form action="javascript:submit2();" class="form-horizontal">
-                  <button id="submit_second" type="submit" class="btn btn-primary btn-block">Submit</button>
+                  <button id="submit_second" type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
 
@@ -202,12 +211,6 @@
             window.location.href = 'editor.html?id=' + userId + '&section=' + sectionId;
 
             //open editor, passing info via address
-
-
-
-
-
-
         }
 
         draw();
