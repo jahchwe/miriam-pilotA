@@ -3,11 +3,12 @@
     <head>
       <meta charset="UTF-8">
       <title>Editor</title>
+      <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-      <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
+
       <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"> -->
       <link rel="stylesheet" type="text/css" href="css/vis.css">
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
@@ -55,7 +56,6 @@
 
 
 
-
     <body>
         <div id="part1" class="part">
             <div id="instr1">
@@ -80,6 +80,7 @@
             <div id="instr2">
                 <p id="instr-text" class="text-center"> Please select the friends of the above person. </p>
                 <p id="instr-text" class="text-center"> <b> Please revise your original input as necessary. </b></p>
+                <p id="equal_alert" class="text-center" style="color:red;"> <b> Please ensure that your numerical input matches the number of nodes selected. </b></p>
             </div>
         </div>
 
@@ -106,9 +107,22 @@
 
     <script type="text/javascript" src="js/subject_imgs.js"></script>
     <script type="text/javascript">
+        $(function() {
+            var config = {
+                apiKey: "AIzaSyDJyhJih5PaAWrLmRfHf0KwpOaEvGchtpY",
+                authDomain: "network-learning.firebaseapp.com",
+                databaseURL: "https://network-learning.firebaseio.com",
+                projectId: "network-learning",
+                storageBucket: "network-learning.appspot.com",
+                messagingSenderId: "907435908984"
+            };
+
+            firebase.initializeApp(config);
+        });
 
         $("#part2").hide();
         $("#instr2").hide();
+        $("#equal_alert").hide();
 
         var userId = '';
         var sid = null, sectionId = null;
@@ -182,18 +196,29 @@
         }
 
         function submit2() {
+            var endTime = new Date();
             $('#friend_input').removeClass('is-invalid');
             if (eval_input($("#friend_input").val())) {
                 $('#friend_input').addClass('is-invalid');
                 return;
             }
 
-            friend_inputs.push($("#friend_input").val())
-
             $('.node_clicked').each(function() {
                 var zid = $(this).attr("id")
                 checked_nodes.push(zid.substring(8))
             })
+
+            if (parseInt($("#friend_input").val()) !== checked_nodes.length) {
+                console.log($("#friend_input").val())
+                console.log(checked_nodes.length)
+                checked_nodes = [];
+                $("#equal_alert").show();
+                return;
+            }
+
+            friend_inputs.push($("#friend_input").val())
+
+
             console.log("checked nodes")
             console.log(checked_nodes)
 
@@ -201,24 +226,57 @@
             console.log("results")
             console.log(results)
 
-            if (iterator < 10) {
+            if (iterator < 11) {
                 iterator+=1;
                 $('#friend_input').val("");
                 checked_nodes = [];
                 friend_inputs = [];
                 $('#submit_first').show();
+                $('#equal_alert').hide();
                 $('#part2').hide();
                 $('#instr2').hide();
                 draw();
                 return;
             }
 
-            window.location.href = 'editor.html?id=' + userId + '&section=' + sectionId;
+            /*
+            firebase.auth().signInAnonymously().then(function (user) {
+                console.log("success")
+                console.log(user.uid)
+            }, function () {
+                console.log("failure")
+            });
+            */
 
-            //open editor, passing info via address
+            firebase.auth().signInAnonymously().then(function(user) {
+                console.log("logged in")
+                var firebaseUid = user.uid;
+                console.log('Signed in as ' + firebaseUid);
+
+                var data = {
+                    //firebase_uid: firebaseUid,
+                    start_time: startTime.toString(),
+                    end_time: endTime.toString(),
+                    duration: endTime.getTime() - startTime.getTime(),
+                    friend_recall: results
+                };
+                var userRef = firebase.database().ref(userId + '/' + data.start_time);
+
+                userRef.set(data).then(function() {
+                    firebase.auth().currentUser.delete();
+                    window.location.href = 'editor.html?id=' + userId;
+                    }, function() {
+                        console.log("firebase error1");
+                    });
+                }, function (){
+                  console.log("firebase error2");
+              });
+
+
         }
 
         draw();
+        var startTime = new Date();
 
         /*
         $(function() {

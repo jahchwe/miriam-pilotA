@@ -8,17 +8,23 @@ $(function() {
     var userId = '';
     var sid = null, sectionId = null;
     var parameters = window.location.search.substring(1);
-    if (parameters.length > 17 && parameters.length < 21) {
+    if (parameters.length > 7) {
         userId = parameters.split(/[&=]/)[1];
         sid = userId.substring(4);
-        sectionId = parameters[parameters.length - 1];
+        //sectionId = parameters[parameters.length - 1];
     }
+    /*
     if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') ||
         isNaN(sid) || isNaN(sectionId)) {
         $('body').empty();
         return;
     }
+    */
     sid = parseInt(sid);
+
+
+    //var userId = "ucla0";
+    //var sid = 0;
 
 
     var nodeName = "person";
@@ -33,13 +39,14 @@ $(function() {
 
     // initialize firebase
     var config = {
-        apiKey: "AIzaSyD1x_G62LDh16lIhg--xKt69N79TgH--l8",
-        authDomain: "network-editor.firebaseapp.com",
-        databaseURL: "https://network-editor.firebaseio.com",
-        projectId: "network-editor",
-        storageBucket: "network-editor.appspot.com",
-        messagingSenderId: "208552070855"
+        apiKey: "AIzaSyDJyhJih5PaAWrLmRfHf0KwpOaEvGchtpY",
+        authDomain: "network-learning.firebaseapp.com",
+        databaseURL: "https://network-learning.firebaseio.com",
+        projectId: "network-learning",
+        storageBucket: "network-learning.appspot.com",
+        messagingSenderId: "907435908984"
     };
+
     firebase.initializeApp(config);
 
     // construct network
@@ -236,13 +243,13 @@ $(function() {
             console.log('Signed in as ' + firebaseUid);
 
             var data = {
-                firebase_uid: firebaseUid,
+                //firebase_uid: firebaseUid,
                 start_time: startTime.toString(),
                 end_time: endTime.toString(),
                 duration: endTime.getTime() - startTime.getTime(),
                 data: nodes
             };
-            var userRef = firebase.database().ref(userId + '/' + sectionId + '/' + data.start_time);
+            var userRef = firebase.database().ref(userId + '/' + data.start_time);
             userRef.set(data).then(function() {
                 // success
                 // save a network image
@@ -250,7 +257,7 @@ $(function() {
 
                 canvas.toBlob(function(blob) {
                     var storageRef = firebase.storage().ref();
-                    var path = userId + '_' + sectionId + '_' + startTime.toString() + '.png';
+                    var path = userId + '_' + startTime.toString() + '.png';
                     storageRef.child(path).put(blob).then(function() {
                         hookWindow = false;
                         firebase.auth().currentUser.delete();

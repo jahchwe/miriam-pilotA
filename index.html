@@ -40,17 +40,6 @@
                         <label id="user-id-text" class="control-label" for="user-id">ID</label>
                         <input id="user-id" type="text" class="form-control input-md" required>
                     </div>
-                    <div id="section-group" class="form-group">
-                        <label id="user-id-text" class="control-label">Section</label>
-                        <div class="row">
-                            <div class="radio col-auto">
-                                <input name="section" type="radio" value="1" required> 1
-                            </div>
-                            <div class="radio col">
-                                <input name="section" type="radio" value="2"> 2
-                            </div>
-                        </div>
-                    </div>
                     <button id="submit" type="submit" class="btn btn-primary submit-btn">Submit</button>
                 </form>
             </div>
@@ -63,10 +52,8 @@
 
         <!-- JavaScript -->
         <script>
-            var instrText = [
-                'On the next page, you will see the images of people again. Your job is to reconstruct the social network you\'ve learned about -- just draw a connection between any two people who are friends.',
-                'On the next page, you will see the images of airports again. Your job is to reconstruct the flight network you\'ve learned about -- just draw a connection between any two airports that are connected by a direct flight.'
-            ];
+            var instrText = "On the next page, you will be asked about the connections you just learned. Please respond as truthfully as possible."
+
             var userId, sectionId;
             $('#instr').hide();
             function signin() {
@@ -77,7 +64,7 @@
                     $('#user-id').addClass('is-invalid');
                     return;
                 }
-                $('#instr-text').text(instrText[parseInt(userId.substring(4)) % 2]);
+                $('#instr-text').text(instrText);
                 $('#info').hide();
                 $('#instr').show();
             }
