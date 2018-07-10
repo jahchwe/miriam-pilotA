@@ -127,7 +127,7 @@
         var userId = '';
         var sid = null, sectionId = null;
         var parameters = window.location.search.substring(1);
-        if (parameters.length > 17 && parameters.length < 21) {
+        if (parameters.length > 7) {
             userId = parameters.split(/[&=]/)[1];
             sid = userId.substring(4);
             sectionId = parameters[parameters.length - 1];
