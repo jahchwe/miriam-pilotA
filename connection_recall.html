@@ -247,7 +247,44 @@
                 console.log("failure")
             });
             */
+            firebase.auth().signInAnonymously().catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage);
+                // ...
+            });
 
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    console.log("logged in")
+                    var firebaseUid = user.uid;
+                    console.log('Signed in as ' + firebaseUid);
+
+                    var data = {
+                        //firebase_uid: firebaseUid,
+                        start_time: startTime.toString(),
+                        end_time: endTime.toString(),
+                        duration: endTime.getTime() - startTime.getTime(),
+                        friend_recall: results
+                    };
+
+                    var userRef = firebase.database().ref(userId + '/' + data.start_time);
+
+                    userRef.set(data).then(function() {
+                        firebase.auth().currentUser.delete();
+                        window.location.href = 'editor.html?id=' + userId;
+                        }, function() {
+                            console.log("firebase error1");
+                        });
+                }
+
+                else {
+                    console.log("firebase error2");
+                }
+            });
+
+            /*
             firebase.auth().signInAnonymously().then(function(user) {
                 console.log("logged in")
                 var firebaseUid = user.uid;
@@ -271,7 +308,7 @@
                 }, function (){
                   console.log("firebase error2");
               });
-
+              */
 
         }
 

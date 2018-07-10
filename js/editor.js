@@ -238,6 +238,63 @@ $(function() {
         network.setOptions({ nodes: { font: { vadjust: -80 } } });
 
         // send data
+
+        firebase.auth().signInAnonymously().catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorMessage);
+            // ...
+        });
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              var firebaseUid = user.uid;
+              console.log('Signed in as ' + firebaseUid);
+
+              var data = {
+                  //firebase_uid: firebaseUid,
+                  start_time: startTime.toString(),
+                  end_time: endTime.toString(),
+                  duration: endTime.getTime() - startTime.getTime(),
+                  data: nodes
+              };
+              var userRef = firebase.database().ref(userId + '/' + data.start_time);
+              userRef.set(data).then(function() {
+                  // success
+                  // save a network image
+                  var canvas = $('.vis-network canvas')[0];
+
+                  canvas.toBlob(function(blob) {
+                      var storageRef = firebase.storage().ref();
+                      var path = userId + '_' + startTime.toString() + '.png';
+                      storageRef.child(path).put(blob).then(function() {
+                          hookWindow = false;
+                          firebase.auth().currentUser.delete();
+                          $('#process-modal').modal('hide');
+                          $('body').empty();
+                          $('body').append($('<p>', {
+                              text: 'Your response has been recorded. Thank you!',
+                              id: 'end-instr'
+                          }));
+                      }, function() {
+                          hookWindow = false;
+                          firebase.auth().currentUser.delete();
+                          $('#process-modal').modal('hide');
+                          alert('The response has been recorded, but the image failed to save. Please right click on the image and save it, or find the experimenter. Thank you!');
+                      });
+                  });
+              }, function() {
+                  $('#process-modal').modal('hide');
+                  alert('Error: cannot connect to Firebase');
+              });
+
+            }
+            else {
+                console.log("failed login")
+            }
+        });
+        /*
         firebase.auth().signInAnonymously().then(function(user) {
             var firebaseUid = user.uid;
             console.log('Signed in as ' + firebaseUid);
@@ -283,6 +340,7 @@ $(function() {
             $('#process-modal').modal('hide');
             alert('Error: cannot connect to Firebase');
         });
+        */
     });
 
     draw();
