@@ -28,7 +28,7 @@ $(function() {
 
 
     var nodeName = "person";
-    $('#instr').html('Click "Add Connection" to add connections between people.<br/><br/>Click on a connection to edit or remove it.');
+    $('#instr').html('Please draw the friendships you learned about as '+'completely and accurately'.bold()+' as you can.<br/><br/>Click "Add Connection" to draw connections between people who are friends with each other.<br/><br/>Click on a connection to edit or remove it.<br/><br/>Once you have finished drawing all of the friendships, press "Submit".');
 
     // prevent closing window
     window.onbeforeunload = function() {
