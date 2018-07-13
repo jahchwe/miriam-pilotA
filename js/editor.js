@@ -213,6 +213,10 @@ $(function() {
     });
 
     $('#submit').click(function() {
+
+        if (!(confirm("Are you sure that you're finished entering all of the friendships?"))) {
+            return;
+        }
         if ($(this).hasClass('disabled')) {
             return;
         }
