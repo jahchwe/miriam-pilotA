@@ -21,6 +21,10 @@
           border-style: solid;"
         }
 
+        .first-row {
+          max-width: 83.33333%;
+        }
+
         #part1 {
           position: relative;
           width: 40%;
@@ -33,6 +37,13 @@
           width: 80%;
           top: 10%;
           left: 10%;
+        }
+
+        #part3 {
+          position: relative;
+          width: 40%;
+          top: 10%;
+          left: 30%;
         }
 
         .caption {
@@ -85,7 +96,6 @@
         </div>
 
         <div id="part2">
-
             <div id="other_nodes" class="container">
                 <div id="row1" class="row">
                 </div>
@@ -99,8 +109,11 @@
                   <button id="submit_second" type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
+        </div>
 
-
+        <div id="part3">
+            <p class="text-center">On the next page, please draw the friendships you learned about as <b>completely and accurately</b> as you can.<br/><br/>Click "Add Connection" to draw connections between people who are friends with each other.<br/><br/>Click on a connection to edit or remove it.<br/><br/>Once you have finished drawing all of the friendships, press "Submit".</p>
+            <button id="start_editor" type="submit" class="btn btn-success">Start</button>
         </div>
     </body>
 
@@ -119,7 +132,7 @@
 
             firebase.initializeApp(config);
         });
-
+        $("#part3").hide();
         $("#part2").hide();
         $("#instr2").hide();
         $("#equal_alert").hide();
@@ -163,21 +176,45 @@
         }
         */
 
+
+        function shuffle_array(array1) {
+            var array = Array.from(array1)
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        }
+
+        var pictures_index = [0,1,2,3,4,5,6,7,8,9,10,11];
+        var rando_pictures_index = shuffle_array(pictures_index);
+
         function draw() {
+            //row size adjustment class first-row needs to be added to the label class
             console.log("called")
             $("#row1").empty();
             $("#row2").empty();
 
-            var row;
-            $("#primary_node_pic").attr("src", "img/" + subject_imgs[iterator]);
+            var local_random_index = shuffle_array(rando_pictures_index);
 
+            $("#primary_node_pic").attr("src", "img/" + subject_imgs[rando_pictures_index[iterator]]);
+
+            var row_count = 0;
             for (var i = 0; i < subject_imgs.length; ++i) {
-                row = i < 6 ? "1":"2";
-                if (i===iterator) {
+                if (local_random_index[i] === rando_pictures_index[iterator]) {
                     continue;
                 }
+                if (row_count < 5) {
+                  $("#row1").append('<div class="col-sm"> <div class="button-group-toggle" data-toggle="buttons"><label id="node_button" class="btn btn-circle active node-button first-row" for="node_pic' + local_random_index[i] + '"><input id="node_button_check" type="checkbox" name="options" autocomplete="off" active><img id="node_pic' + local_random_index[i] + '" src="img/'+ subject_imgs[local_random_index[i]] +'" class="mx-auto d-block img-fluid"></label></div></div>');
+                }
+                else {
+                  $("#row2").append('<div class="col-sm"> <div class="button-group-toggle" data-toggle="buttons"><label id="node_button" class="btn btn-circle active node-button" for="node_pic' + local_random_index[i] + '"><input id="node_button_check" type="checkbox" name="options" autocomplete="off" active><img id="node_pic' + local_random_index[i] + '" src="img/'+ subject_imgs[local_random_index[i]] +'" class="mx-auto d-block img-fluid"></label></div></div>');
+                }
 
-                $("#row" + row).append('<div class="col-sm" <div class="button-group-toggle" data-toggle="buttons"><label id="node_button" class="btn btn-circle active node-button" for="node_pic' + i + '"><input id="node_button_check" type="checkbox" name="options" autocomplete="off" active><img id="node_pic' + i + '" src="img/'+ subject_imgs[i] +'" class="mx-auto d-block img-fluid"></label></div></div>');
+                row_count += 1;
+
             }
             attach_listeners();
 
@@ -194,6 +231,12 @@
             $('#part2').show();
             $('#instr2').show();
         }
+
+
+
+        $("#start_editor").click(function() {
+            window.location.href = 'editor.html?id=' + userId;
+        });
 
         function submit2() {
             var endTime = new Date();
@@ -239,6 +282,19 @@
                 return;
             }
 
+            //create dictionary to accomodate randomized presentation
+
+            var results_final = {};
+
+            for (var z = 0; z < results.length; z++) {
+                results_final[rando_pictures_index[z]] = results[z];
+            }
+
+            console.log("rando");
+            console.log(rando_pictures_index);
+            console.log("results")
+            console.log(results_final)
+
             /*
             firebase.auth().signInAnonymously().then(function (user) {
                 console.log("success")
@@ -266,14 +322,17 @@
                         start_time: startTime.toString(),
                         end_time: endTime.toString(),
                         duration: endTime.getTime() - startTime.getTime(),
-                        friend_recall: results
+                        friend_recall: results_final
                     };
 
                     var userRef = firebase.database().ref(userId + '/' + data.start_time);
 
                     userRef.set(data).then(function() {
                         firebase.auth().currentUser.delete();
-                        window.location.href = 'editor.html?id=' + userId;
+                        //window.location.href = 'editor.html?id=' + userId;
+                        $("#part1").hide();
+                        $("#part2").hide();
+                        $("#part3").show();
                         }, function() {
                             console.log("firebase error1");
                         });
