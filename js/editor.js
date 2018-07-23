@@ -276,11 +276,8 @@ $(function() {
                           hookWindow = false;
                           firebase.auth().currentUser.delete();
                           $('#process-modal').modal('hide');
-                          $('body').empty();
-                          $('body').append($('<p>', {
-                              text: 'Your response has been recorded. Thank you!',
-                              id: 'end-instr'
-                          }));
+                          $("#editor").hide();
+                          $("#info-form").show();
                       }, function() {
                           hookWindow = false;
                           firebase.auth().currentUser.delete();

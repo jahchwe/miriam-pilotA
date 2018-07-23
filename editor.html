@@ -17,18 +17,136 @@
         <link rel="stylesheet" type="text/css" href="css/net_editor.css">
     </head>
 
+    <style>
+        #info-form {
+            position: absolute;
+            width: 20%;
+            top: 35%;
+            left: 40%;
+        }
+    </style>
+
     <body>
-        <div id="network-wrapper"></div>
-        <p id="instr"></p>
+        <div id="editor">
+            <div id="network-wrapper"></div>
+            <p id="instr"></p>
 
-        <button id="reset" class="btn btn-secondary">Reset</button>
-        <button id="submit" class="btn btn-primary disabled">Submit</button>
+            <button id="reset" class="btn btn-secondary">Reset</button>
+            <button id="submit" class="btn btn-primary disabled">Submit</button>
 
-        <div id="process-modal" class="modal">
-            Processing...
+            <div id="process-modal" class="modal">
+                Processing...
+            </div>
+        </div>
+
+        <div id="info-form" class="survey" data-toggle="validator" role="form">
+            <p> Please answer these demographic questions. </p>
+            <form action="javascript:submitted();" class="form-horizontal">
+                <div id="age-group" class="form-group">
+                    <label id="age-text" class="control-label" for="age">Age</label>
+                    <input id="age" type="number" min=0 max=90 class="form-control input-md" required>
+                </div>
+                <div id="gender-group" class="form-group">
+                    <label id="gender-text" class="control-label" for="gender">Gender</label>
+                    <select id="gender" class="form-control" required>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Prefer not to answer.</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div id="gender-other-group" class="form-group">
+                    <input id="gender-other" class="form-control" placeholder="Other (please describe)">
+                </div>
+                <div id="race-group" class="form-group">
+                    <label id="race-text" class="control-label" for="race">Race</label>
+                    <select id="race" class="form-control" required>
+                        <option>White</option>
+                        <option>Latino</option>
+                        <option>African</option>
+                        <option>East Asian</option>
+                        <option>South or Southeast Asian</option>
+                        <option>Native Hawaiian or Other Pacific Islander</option>
+                        <option>American Indian or Alaska Native</option>
+                        <option>Middle Eastern or Central Asian</option>
+                        <option>Prefer not to answer.</option>
+                        <option>Other or Mixed</option>
+                    </select>
+                </div>
+                <div id="race-other-group" class="form-group">
+                    <input id="race-other" class="form-control" placeholder="Other or Mixed (please describe)">
+                </div>
+                <button id="submit-survey" type="submit" class="btn btn-primary submit-btn">Submit</button>
+            </form>
         </div>
 
         <!-- Script -->
+        <script>
+            $("#info-form").hide();
+            $("#gender-other-group").hide();
+            $("#race-other-group").hide();
+            console.log("hil");
+            $(function() {
+                $("#gender").on("change", function(e){
+                    $("#gender-other-group").hide();
+                    if (this.value === "Other") {
+                        $("#gender-other-group").show();
+                    }
+                })
+            })
+
+            $(function() {
+                $("#race").on("change", function(e){
+                    $("#race-other-group").hide();
+                    if (this.value === "Other or Mixed") {
+                        $("#race-other-group").show();
+                    }
+                })
+            })
+            function submitted() {
+                var data = [$("#age").val(), $("#gender").val(), $("#gender-other").val(), $("#race").val(), $("#race-other").val()];
+
+                firebase.auth().signInAnonymously().catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorMessage);
+                    // ...
+                });
+
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        console.log("logged in")
+                        var firebaseUid = user.uid;
+                        console.log('Signed in as ' + firebaseUid);
+
+                        var data = {
+                            //firebase_uid: firebaseUid,
+                            demographics: data
+                        };
+
+                        var userRef = firebase.database().ref(userId + '/' + data.start_time);
+
+                        userRef.set(data).then(function() {
+                            firebase.auth().currentUser.delete();
+                            //window.location.href = 'editor.html?id=' + userId;
+                            }, function() {
+                                console.log("firebase error1");
+                            });
+                    }
+
+                    else {
+                        console.log("firebase error2");
+                    }
+                });
+                console.log(data)
+                $('body').empty();
+                $('body').append($('<p>', {
+                    text: 'Your response has been recorded. Thank you!',
+                    id: 'end-instr'
+                }));
+            }
+        </script>
         <script type="text/javascript" src="js/subject_imgs.js"></script>
         <script type="text/javascript" src="js/editor.js"></script>
     </body>
