@@ -244,7 +244,7 @@ $(function() {
         // send data
 
         firebase.auth().signInAnonymously().catch(function(error) {
-            // Handle Errors here.
+            // Handle Errors here.f
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorMessage);
@@ -292,7 +292,7 @@ $(function() {
 
             }
             else {
-                console.log("failed login")
+                console.log("signed out")
             }
         });
         /*

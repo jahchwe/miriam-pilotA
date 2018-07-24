@@ -82,6 +82,22 @@
 
         <!-- Script -->
         <script>
+            var userId = '';
+            var sid = null, sectionId = null;
+            var parameters = window.location.search.substring(1);
+            if (parameters.length > 7) {
+                userId = parameters.split(/[&=]/)[1];
+                sid = userId.substring(4);
+                //sectionId = parameters[parameters.length - 1];
+            }
+            /*
+            if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') ||
+                isNaN(sid) || isNaN(sectionId)) {
+                $('body').empty();
+                return;
+            }
+            */
+            sid = parseInt(sid);
             $("#info-form").hide();
             $("#gender-other-group").hide();
             $("#race-other-group").hide();
@@ -104,7 +120,7 @@
                 })
             })
             function submitted() {
-                var data = [$("#age").val(), $("#gender").val(), $("#gender-other").val(), $("#race").val(), $("#race-other").val()];
+                var demos = [$("#age").val(), $("#gender").val(), $("#gender-other").val(), $("#race").val(), $("#race-other").val()];
 
                 firebase.auth().signInAnonymously().catch(function(error) {
                     // Handle Errors here.
@@ -120,14 +136,14 @@
                         var firebaseUid = user.uid;
                         console.log('Signed in as ' + firebaseUid);
 
-                        var data = {
+                        var data1 = {
                             //firebase_uid: firebaseUid,
-                            demographics: data
+                            demographics: demos
                         };
 
-                        var userRef = firebase.database().ref(userId + '/' + data.start_time);
+                        var userRef = firebase.database().ref(userId + "/demographics");
 
-                        userRef.set(data).then(function() {
+                        userRef.set(data1).then(function() {
                             firebase.auth().currentUser.delete();
                             //window.location.href = 'editor.html?id=' + userId;
                             }, function() {
@@ -136,10 +152,10 @@
                     }
 
                     else {
-                        console.log("firebase error2");
+                        console.log("signed out");
                     }
                 });
-                console.log(data)
+                //console.log(data)
                 $('body').empty();
                 $('body').append($('<p>', {
                     text: 'Your response has been recorded. Thank you!',
