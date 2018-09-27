@@ -188,7 +188,7 @@
             return array;
         }
 
-        var pictures_index = [0,1,2,3,4,5,6,7,8,9,10,11];
+        var pictures_index = [0,1,2,3,4,5,6,7,8,9];
         var rando_pictures_index = shuffle_array(pictures_index);
 
         function draw() {
@@ -269,7 +269,7 @@
             console.log("results")
             console.log(results)
 
-            if (iterator < 11) {
+            if (iterator < 9) {
                 iterator+=1;
                 $('#friend_input').val("");
                 checked_nodes = [];
@@ -287,7 +287,7 @@
             var results_final = {};
 
             for (var z = 0; z < results.length; z++) {
-                results_final[rando_pictures_index[z]] = results[z];
+                results_final[subject_imgs[rando_pictures_index[z]]] = results[z];
             }
 
             console.log("rando");
