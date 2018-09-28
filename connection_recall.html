@@ -22,7 +22,7 @@
         }
 
         .first-row {
-          max-width: 83.33333%;
+          max-width: 80%;
         }
 
         #part1 {
@@ -206,7 +206,7 @@
                 if (local_random_index[i] === rando_pictures_index[iterator]) {
                     continue;
                 }
-                if (row_count < 5) {
+                if (row_count < 4) {
                   $("#row1").append('<div class="col-sm"> <div class="button-group-toggle" data-toggle="buttons"><label id="node_button" class="btn btn-circle active node-button first-row" for="node_pic' + local_random_index[i] + '"><input id="node_button_check" type="checkbox" name="options" autocomplete="off" active><img id="node_pic' + local_random_index[i] + '" src="img/'+ subject_imgs[local_random_index[i]] +'" class="mx-auto d-block img-fluid"></label></div></div>');
                 }
                 else {
