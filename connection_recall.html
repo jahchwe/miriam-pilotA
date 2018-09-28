@@ -265,7 +265,12 @@
             console.log("checked nodes")
             console.log(checked_nodes)
 
-            results.push([friend_inputs,checked_nodes])
+            checked_nodes_names = []
+            for (var z = 0; z < checked_nodes.length; z++) {
+                checked_nodes_names[z] = subject_imgs[checked_nodes[z]]
+            }
+
+            results.push([friend_inputs,checked_nodes_names])
             console.log("results")
             console.log(results)
 
@@ -289,6 +294,7 @@
             for (var z = 0; z < results.length; z++) {
                 results_final[subject_imgs[rando_pictures_index[z]]] = results[z];
             }
+
 
             console.log("rando");
             console.log(rando_pictures_index);
