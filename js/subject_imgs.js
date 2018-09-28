@@ -1,1 +1,1 @@
-var subject_imgs = ["AF-203.png", "AF-234.png", "AM-228.png", "AM-243.png", "LF-213.png", "LF-229.png", "LM-211.png", "WF-039.png", "WM-214.png", "WM-230.png"];
+var subject_imgs = ["AF-203", "AF-234", "AM-228", "AM-243", "LF-213", "LF-229", "LM-211", "WF-039", "WM-214", "WM-230"];

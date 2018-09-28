@@ -58,7 +58,7 @@ $(function() {
         initial_nodes.push({
             id: i,
             //label: subject_imgs[sid][sectionId][i][1],
-            image: IMG_DIR + subject_imgs[i],
+            image: IMG_DIR + subject_imgs[i] + ".png" ,
             shape: 'circularImage'
         });
     }
