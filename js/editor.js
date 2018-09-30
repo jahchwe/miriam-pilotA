@@ -1,5 +1,4 @@
 var hookWindow = false;
-var network = null;
 
 $(function() {
     'use strict';
@@ -53,7 +52,7 @@ $(function() {
     // construct network
     var IMG_DIR = 'img/'
     var initial_nodes = [];
-    network = null;
+    var network = null;
 
     for (var i = 0; i < subject_imgs.length; ++i) {
         initial_nodes.push({
