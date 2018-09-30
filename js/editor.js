@@ -56,7 +56,7 @@ $(function() {
 
     for (var i = 0; i < subject_imgs.length; ++i) {
         initial_nodes.push({
-            id: i,
+            id: subject_imgs[i],
             //label: subject_imgs[sid][sectionId][i][1],
             image: IMG_DIR + subject_imgs[i] + ".png" ,
             shape: 'circularImage'
