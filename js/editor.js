@@ -225,12 +225,13 @@ $(function() {
 
         // get network data
         var positions = network.getPositions();
-        var nodes = Object.keys(positions).map(function (key) {
+        var nodes = {};
+        Object.keys(positions).forEach(function(key, index) {
             positions[key].id = key;
-            return positions[key];
+            nodes[key] = positions[key];
         });
-        nodes.forEach(function(elem, index) {
-            elem.connections = network.getConnectedNodes(index);
+        $.each(nodes, function(index, value) {
+            this.connections = network.getConnectedNodes(index);
         });
 
         // showing node IDs
