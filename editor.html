@@ -39,13 +39,20 @@
             </div>
         </div>
 
+
         <div id="info-form" class="survey" data-toggle="validator" role="form">
-            <p> Please answer these demographic questions. </p>
+            <p> Please answer the following questions: </p>
             <form action="javascript:submitted();" class="form-horizontal">
+                <div id="confidence-group" class="form-group">
+                    <label id="confidence-text" class="control-label" for="confidence">How confident are you in your answers? Please enter a number on a scale of 0% (not at all confident) to 100% (extremely confident).</label>
+                    <input id="confidence" type="number" min=0 max=100 class="form-control input-md" required>
+                </div>
+
                 <div id="age-group" class="form-group">
                     <label id="age-text" class="control-label" for="age">Age</label>
                     <input id="age" type="number" min=0 max=90 class="form-control input-md" required>
                 </div>
+
                 <div id="gender-group" class="form-group">
                     <label id="gender-text" class="control-label" for="gender">Gender</label>
                     <select id="gender" class="form-control" required>
@@ -55,9 +62,11 @@
                         <option>Other</option>
                     </select>
                 </div>
+
                 <div id="gender-other-group" class="form-group">
                     <input id="gender-other" class="form-control" placeholder="Other (please describe)">
                 </div>
+
                 <div id="race-group" class="form-group">
                     <label id="race-text" class="control-label" for="race">Race</label>
                     <select id="race" class="form-control" required>
@@ -120,7 +129,7 @@
                 })
             })
             function submitted() {
-                var demos = [$("#age").val(), $("#gender").val(), $("#gender-other").val(), $("#race").val(), $("#race-other").val()];
+                var demos = [$("#confidence").val(), $("#age").val(), $("#gender").val(), $("#gender-other").val(), $("#race").val(), $("#race-other").val()];
 
                 firebase.auth().signInAnonymously().catch(function(error) {
                     // Handle Errors here.
@@ -140,7 +149,7 @@
                             //firebase_uid: firebaseUid,
                             demographics: demos
                         };
-
+                        
                         var userRef = firebase.database().ref(userId + "/demographics");
 
                         userRef.set(data1).then(function() {
